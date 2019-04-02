@@ -1,0 +1,47 @@
+*{margin: 0px;padding: 0px}
+a{text-decoration: none}
+
+
+.header{
+    width:100%;
+    height: 40px;
+    background: #333333;
+}
+
+.body{
+    width: 100%;
+    height: 1200px;
+}
+.wordcloud{
+    width:100%;
+    height: 200px;
+    background: #cccccc;
+}
+
+.hotlist{
+    width: 100%;
+    height: 1000px;
+}
+
+.hot{
+    width: 300px;
+    height: 1000px;
+    background: aqua;
+    float:left
+}
+.hot_title{
+    width: 300px;
+    height: 40px;
+    background: cornflowerblue;
+}
+
+.grad{
+    widht:500px;
+    height: 1000px;
+    background: antiquewhite;
+}
+.footer{
+    width:100%;
+    height: 30px;
+    background: #333333;
+}
