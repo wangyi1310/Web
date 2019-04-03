@@ -26,19 +26,35 @@ a{text-decoration: none}
 .hot{
     width: 300px;
     height: 1000px;
-    background: aqua;
-    float:left
+    float: left;
 }
 .hot_title{
     width: 300px;
     height: 40px;
-    background: cornflowerblue;
+    background: #ffffff;
+    text-align: left;
+}
+
+.hot_item{
+    width: 300px;
+    height: 960px;
+    text-align: left;
+    background: beige;
+}
+
+.hot_item ol{
+    padding-top: 10px;
+}
+
+.hot_item li{
+    font-size: 20px;
 }
 
 .grad{
-    widht:500px;
+    width: 1549px;
     height: 1000px;
     background: antiquewhite;
+    float: right;
 }
 .footer{
     width:100%;

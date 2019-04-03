@@ -11,17 +11,25 @@ type MainController struct {
 }
 
 func (c *MainController) Index() {
-	c.Data["Website"] = "beego.me"
-	c.Data["Email"] = "astaxie@gmail.com"
+	
+	var hot_themes []common.HotTheme
+	for a:=0;a<20;a++ {
+		hot_themes = append(hot_themes,
+			common.HotTheme{
+				ThemeName:     "test",
+				ThemePopulors: 0,
+				ThemeUrl:      "",
+			})
+	}
+	c.Data["Themes"] = common.DefaultOutMsg{
+		Length: len(hot_themes),
+		Data: hot_themes,
+	}
 	c.TplName = "index.html"
 }
 
 
 func (c *MainController) GetHotTitleData(){
-	c.Data["json"] = common.DefaultOutMsg{
-		Code:0,
-		Msg:"success",
-	}
-	c.ServeJSON()
+	
 
 }
