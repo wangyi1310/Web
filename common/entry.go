@@ -11,4 +11,5 @@ type HotTheme struct {
 	ThemeName     string
 	ThemePopulors int
 	ThemeUrl      string
+	ThemeIndex    int
 }

@@ -20,26 +20,33 @@ a{text-decoration: none}
 
 .hotlist{
     width: 100%;
-    height: 1000px;
+    height: 1050px;
 }
 
 .hot{
-    width: 300px;
-    height: 1000px;
+    width: 20%;
+    height: 980px;
     float: left;
+    border-right: 1px solid #cccccc;
+    margin-top: 5px;
 }
 .hot_title{
     width: 300px;
     height: 40px;
-    background: #ffffff;
     text-align: left;
+    line-height: 40px;
+    font-weight: bold;
 }
 
+.li_item{
+    height: 25px;
+    margin-top: 5px;
+}
 .hot_item{
     width: 300px;
-    height: 960px;
+    height: 950px;
     text-align: left;
-    background: beige;
+    background: rgba(238,241,243,0.3);
 }
 
 .hot_item ol{
@@ -50,11 +57,85 @@ a{text-decoration: none}
     font-size: 20px;
 }
 
-.grad{
-    width: 1549px;
-    height: 1000px;
-    background: antiquewhite;
-    float: right;
+.grad {
+    padding-left: 5px;
+    margin-top: 40px;
+    float: left;
+    width:  80% ;
+    height: 640px;
+}
+
+.grad_bar{
+    width: 100%;
+    height: 400px;
+}
+
+.grad_bar1{
+    width: 30%;
+    height: 400px;
+    float: left;
+}
+.grad_bar2{
+    width: 25%;
+    height: 400px;
+    margin-left: 10px;
+    float: left;
+}
+.grad_bar3{
+    width: 25%;
+    height: 400px;
+    float: left;
+    margin-left: 35px;
+}
+.grad_bar2_detail_inc{
+    width: 4%;
+    height: 400px;
+    float: left;
+}
+
+.grad_bar2_detail_info{
+    width: 6%;
+    height: 400px;
+    float: left;
+}
+.grad_bar2_detail_info_item1{
+    width:50px;
+    height: 20px;
+    background: #F7464A;
+    margin-top: 10px;
+
+}
+.info{
+    margin-top:8px;
+}
+
+.grad_bar2_detail_info_item2{
+    width:50px;
+    height: 20px;
+    background: #46BFBD;
+    margin-top: 10px;
+}
+
+.grad_bar2_detail_info_item3{
+    width:50px;
+    height: 20px;
+    background: #FDB45C;
+    margin-top: 10px;
+}
+
+.grad_bar2_detail_info_item4{
+    width:50px;
+    height: 20px;
+    background: #949FB1;
+    margin-top: 10px;
+}
+
+.grad_commit{
+    margin-top: 15px;
+    width: 100%;
+    height: 540px;
+    background: #cccccc;
+
 }
 .footer{
     width:100%;

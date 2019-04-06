@@ -19,6 +19,7 @@ func (c *MainController) Index() {
 				ThemeName:     "test",
 				ThemePopulors: 0,
 				ThemeUrl:      "",
+				ThemeIndex:    a+1,
 			})
 	}
 	c.Data["Themes"] = common.DefaultOutMsg{

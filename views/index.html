@@ -4,82 +4,226 @@
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="static/css/index.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>超酷HTML5 Canvas图表应用Chart.js柱形图</title>
     <link rel="stylesheet" type="text/css" href="static/css/normalize.css" />
     <link rel="stylesheet" type="text/css" href="static/css/default.css">
     <style type="text/css">
-        .demo-chat{width: 50%;margin: 0 auto;}
+        .demo-chat{width: 400px;}
     </style>
     <!--[if IE]>
     <script src="http://libs.useso.com/js/html5shiv/3.7/html5shiv.min.js"></script>
     <![endif]-->
 </head>
-<body>
+<body style="width:1850px">
 <div class ="box">
     <div class = "header"></div>
     <div class = "body">
-        <div class="wordcloud"> </div>
-        <div class="hotlist">
-            <div class = "hot">
-                <div class="hot_title">
-                    <a>知乎网舆论热度排行榜</a>
-                </div>
-                <div class="hot_item">
-                    <ol>
-                        {{range $index, $elem := .Themes.Data}}
-                            <li><span style="margin-left: 20px">{{.ThemeName}}</span><span style="margin-left: 230px">{{.ThemePopulors}}</span></li>
-                        {{end}}
-                    </ol>
-                </div>
-            </div>
-            <div class = "grad">
-                <div class="htmleaf-container">
-                    <header class="htmleaf-header">
-                        <div style="text-align:center;clear:both">
-                            <script src="/gg_bd_ad_720x90.js" type="text/javascript"></script>
-                            <script src="/follow.js" type="text/javascript"></script>
-                        </div>
-                    </header>
-                    <div class="htmleaf-content">
-                        <div class="demo-chat" >
-                            <canvas id="canvas" height="450" width="600"></canvas>
-                        </div>
+            <div class="wordcloud"> </div>
+            <div class="hotlist">
+                <div class = "hot">
+                    <div class="hot_title">
+                        <a style="color: black;">知乎网舆论热度排行榜</a>
+                    </div>
+                    <div class="hot_item">
+                        <ol>
+                            {{range .Themes.Data}}
+                                <li class = "li_item" style="position: relative">
+                                   <span style="font-size: 8px">{{.ThemeIndex}}</span><span style="margin-left: 10px">{{.ThemeName}}</span><span style="right: 3px;position: absolute">{{.ThemePopulors}}</span></li>
+                                <hr style="border: 0.5px solid  #cccccc">
+                            {{end}}
+                        </ol>
                     </div>
                 </div>
-                <script src="static/js/Chart.js"></script>
-                <script>
-                    var randomScalingFactor = function(){ return 50};
+                <div class = "grad">
+                    <div class="grad_bar">
+                        <div class="grad_bar1">
+                            <div class="htmleaf-container">
+                                <div class="htmleaf-content">
+                                    <div class="demo-chat" >
+                                        <div class = "demo-chat_head">
+                                            <a style="font-size: 15px">话题情感倾向实时数据</a>
+                                            <br>
+                                        </div>
+                                        <canvas id="canvas" height="450" width="600"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="grad_bar2">
+                            <div class="htmleaf-container">
+                                <div class="htmleaf-content">
+                                    <div class="demo-chat" >
+                                        <div class = "demo-chat_head">
+                                            <a style="font-size: 15px">话题情感倾向性别分布</a>
+                                        </div>
+                                        <br>
+                                        <canvas id="chart-area" height="450" width="600"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class = "grad_bar2_detail_inc">
+                            <div class="grad_bar2_detail_info_item1"></div><br>
+                            <div class="grad_bar2_detail_info_item2"></div><br>
+                            <div class="grad_bar2_detail_info_item3"></div><br>
+                            <div class="grad_bar2_detail_info_item4"></div><br>
+                        </div>
+                        <div class = "grad_bar2_detail_info">
+                            <div class="info">男性积极</div><br>
+                            <div class="info">男性消极</div><br>
+                            <div class="info">女性积极</div><br>
+                            <div class="info">女性消极</div>
 
-                    var barChartData = {
-                        labels : ["January","February","March","April","May","June","July"],
-                        datasets : [
-                            {
-                                fillColor : "rgba(220,220,220,0.5)",
-                                strokeColor : "rgba(220,220,220,0.8)",
-                                highlightFill: "rgba(220,220,220,0.75)",
-                                highlightStroke: "rgba(220,220,220,1)",
-                                data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
-                            },
-                            {
-                                fillColor : "rgba(151,187,205,0.5)",
-                                strokeColor : "rgba(151,187,205,0.8)",
-                                highlightFill : "rgba(151,187,205,0.75)",
-                                highlightStroke : "rgba(151,187,205,1)",
-                                data : [120,randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
+
+                    </div>
+                        <div class ="grad_bar3">
+                            <div class="htmleaf-container">
+                                <div class="htmleaf-content">
+                                    <div class="demo-chat" >
+                                        <div class = "demo-chat_head">
+                                            <a style="font-size: 15px">评论者学历分布</a>
+                                        </div>
+                                        <canvas id="canvas3" height="450" width="450"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class ="grad_commit"></div>
+                    <script src="static/js/Chart.js"></script>
+                    <script>
+                        function reload1() {
+                            var randomScalingFactor = function(){ return 50};
+                            var barChartData = {
+                                labels : ["January","February","March","April","May","June","July"],
+                                datasets : [
+                                    {
+                                        fillColor : "rgba(220,220,220,0.5)",
+                                        strokeColor : "rgba(220,220,220,0.8)",
+                                        highlightFill: "rgba(220,220,220,0.75)",
+                                        highlightStroke: "rgba(220,220,220,1)",
+                                        data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
+                                    },
+                                    {
+                                        fillColor : "rgba(151,187,205,0.5)",
+                                        strokeColor : "rgba(151,187,205,0.8)",
+                                        highlightFill : "rgba(151,187,205,0.75)",
+                                        highlightStroke : "rgba(151,187,205,1)",
+                                        data : [100,randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
+                                    }
+                                ]
+
                             }
-                        ]
 
-                    }
-                    window.onload = function(){
-                        var ctx = document.getElementById("canvas").getContext("2d");
-                        window.myBar = new Chart(ctx).Bar(barChartData, {
-                            responsive : true
-                        });
-                    }
+                                var ctx = document.getElementById("canvas").getContext("2d");
+                                window.myBar = new Chart(ctx).Bar(barChartData, {
+                                    responsive : true
+                                });
 
-                </script>
+
+                        }
+                        function  reload2() {
+                            var doughnutData = [
+                                {
+                                    value: 300,
+                                    color: "#F7464A",
+                                    highlight: "#FF5A5E",
+                                    label: "Red"
+                                },
+                                {
+                                    value: 50,
+                                    color: "#46BFBD",
+                                    highlight: "#5AD3D1",
+                                    label: "Green"
+                                },
+                                {
+                                    value: 100,
+                                    color: "#FDB45C",
+                                    highlight: "#FFC870",
+                                    label: "Yellow"
+                                },
+                                {
+                                    value: 40,
+                                    color: "#949FB1",
+                                    highlight: "#A8B3C5",
+                                    label: "Grey"
+                                },
+
+                            ];
+
+
+                            var ctx = document.getElementById("chart-area").getContext("2d");
+                            window.myDoughnut = new Chart(ctx).Doughnut(doughnutData, {responsive: true});
+
+                        }
+                        function reload3(){
+                            var pieData = [
+                                {
+                                    value: 300,
+                                    color:"#F7464A",
+                                    highlight: "#FF5A5E",
+                                    label: "Red"
+                                },
+                                {
+                                    value: 50,
+                                    color: "#46BFBD",
+                                    highlight: "#5AD3D1",
+                                    label: "Green"
+                                },
+                                {
+                                    value: 100,
+                                    color: "#FDB45C",
+                                    highlight: "#FFC870",
+                                    label: "Yellow"
+                                },
+                                {
+                                    value: 40,
+                                    color: "#949FB1",
+                                    highlight: "#A8B3C5",
+                                    label: "Grey"
+                                },
+                                {
+                                    value: 120,
+                                    color: "#4D5360",
+                                    highlight: "#616774",
+                                    label: "Dark Grey"
+                                }
+
+                            ];
+
+
+                                var ctx = document.getElementById("chart-area2").getContext("2d");
+                                window.myPie = new Chart(ctx).Pie(pieData);
+
+
+                        }
+                        function reload3(){
+                            var radarChartData = {
+                                labels: ["Eating", "Drinking", "Sleeping", "Designing", "Coding", "Cycling", "Running"],
+                                datasets: [
+                                    {
+                                        label: "My First dataset",
+                                        fillColor: "rgba(220,220,220,0.2)",
+                                        strokeColor: "rgba(220,220,220,1)",
+                                        pointColor: "rgba(220,220,220,1)",
+                                        pointStrokeColor: "#fff",
+                                        pointHighlightFill: "#fff",
+                                        pointHighlightStroke: "rgba(220,220,220,1)",
+                                        data: [65,59,90,81,56,55,40]
+                                    }
+                                ]
+                            };
+
+                            window.myRadar = new Chart(document.getElementById("canvas3").getContext("2d")).Radar(radarChartData, {
+                                responsive: true
+                            });
+
+                        }
+                reload1()
+                reload2()
+                reload3()
+                    </script>
+                </div>
             </div>
-        </div>
     </div>
     <div class = "footer"> </div>
 </div>
