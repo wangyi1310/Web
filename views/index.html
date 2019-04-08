@@ -80,7 +80,7 @@
                                 <div class="htmleaf-content">
                                     <div class="demo-chat" >
                                         <div class = "demo-chat_head">
-                                            <a style="font-size: 15px">评论者学历分布</a>
+                                            <a style="font-size: 15px">评论者行业分布</a>
                                         </div>
                                         <canvas id="canvas3" height="450" width="450"></canvas>
                                     </div>
@@ -212,7 +212,8 @@
                                     }
                                 ]
                             };
-
+<div class="info">女性积极</div><br>
+                            <div class="info">女性消极</div>
                             window.myRadar = new Chart(document.getElementById("canvas3").getContext("2d")).Radar(radarChartData, {
                                 responsive: true
                             });

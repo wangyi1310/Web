@@ -1,14 +1,14 @@
 package fun
 
 import (
-	"test/go/model"
 	"encoding/json"
 	"fmt"
+	"github.com/astaxie/beego/logs"
 	"io/ioutil"
 	"net/http"
 	"os"
 	"regexp"
-	"time"
+	"test/model"
 )
 
 //获取每条热门话题下的评论数据
@@ -80,7 +80,7 @@ func GetComment(url string) model.UserInfo{
 	for{
 		url := GetCommentUrl(url,offset)
 		user := GetCommentRaw(url)
-		if len(user.Data) != OffSet {
+		if len(user.Data) != model.OffSet {
 			break
 		}
 
@@ -93,7 +93,7 @@ func GetComment(url string) model.UserInfo{
 			f.WriteString(u.Content+"\n")
 		}
 
-		offset +=OffSet
+		offset +=model.OffSet
 	}
 	return users
 }
@@ -106,14 +106,22 @@ func FilterIllegalWorld(commnent string) string{
 
 }
 
+
+//需要3张表
+// 第一张表存储热门信息
+//第二张表存储评论信息
+//第三张表存储用户信息
+
 func GetCommits(){
-	model.ClearSql()
-	for {
-		s := ConvertJsontoStruct(GetHotTitlefromRawData())
-		for i, _ := range s {
-			//获取到每条评论后写入sql中 对应的是s然后sql中的每个话题名字对应下方的评论 每5分钟系统跑一次。
-			GetComment(CommitRawUrl + s[i].Id + "/answers")
+	logs.Info("start clear sql")
+	logs.Info( "finish clear sql")
+	s := ConvertJsontoStruct(GetHotTitlefromRawData())
+	fmt.Print(s)
+	for i, _ := range s {
+		//获取到每条评论后写入sql中 对应的是s然后sql中的每个话题名字对应下方的评论 每5分钟系统跑一次。
+		if err:=model.InsertHotTilte(s[i]);err!=nil{
+			fmt.Print("insert failuer")
 		}
+		//GetComment(model.CommitRawUrl + s[i].Id + "/answers")
 	}
-	time.Sleep(5000)
 }

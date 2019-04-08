@@ -6,12 +6,13 @@ import (
 	"io/ioutil"
 	"net/http"
 	"regexp"
+	"test/model"
 )
 
 //获取网页界面上的原始数据
 func GetRawHotData() string{
 	client :=&http.Client{}
-	resp, err := client.Get(BillbordRawUrl)
+	resp, err := client.Get(model.BillbordRawUrl)
 	body, err := ioutil.ReadAll(resp.Body)
 	defer resp.Body.Close()
 
@@ -43,11 +44,10 @@ func GetHotTitlefromRawData() []string {
 }
 
 //保存热门话题的信息并转成struct
-func ConvertJsontoStruct(titles []string) []HotTitle{
-
-	var hot_titles []HotTitle
+func ConvertJsontoStruct(titles []string) []model.HotTitle{
+	var hot_titles []model.HotTitle
 	for _,title := range titles{
-		var hottitle HotTitle
+		var hottitle model.HotTitle
 		err := json.Unmarshal([]byte(title),&hottitle)
 		if err != nil{
 			fmt.Print(err)

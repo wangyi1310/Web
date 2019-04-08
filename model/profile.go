@@ -1,4 +1,8 @@
-package fun
+package model
+
+
+//热门话题和评论信息的结构体
+
 
 type RawData struct{
 	Text string `json:"text"`
@@ -23,6 +27,7 @@ type HotTitle struct{
 
 type AuthorRaw struct{
 	Name string `json:"name"`
+	Sex  int
 }
 
 type UserRaw struct{
@@ -33,6 +38,7 @@ type UserRaw struct{
 
 type UserInfo struct{
 	Data []UserRaw `json:"data"`
+	Url  string    `json:"url"`
 }
 
 const(
@@ -40,3 +46,11 @@ const(
 	BillbordRawUrl="https://www.zhihu.com/billboard"
 	OffSet=20              //每次读完评论之后的偏移
 )
+
+
+const (
+	FEMALE = 0
+	MALE   = 1
+	XMALE  = 2 //获取不到性别
+)
+
