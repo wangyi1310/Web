@@ -6,16 +6,15 @@ import (
 	"github.com/astaxie/beego/logs"
 	"io/ioutil"
 	"net/http"
-	"os"
 	"regexp"
 	"test/model"
+	"time"
 )
 
 //获取每条热门话题下的评论数据
 
 //定义相关的抓取页面的相关配置数据
 
-var f, _= os.Create("1.txt")
 
 //组装相应的获取评论的参数
 
@@ -75,8 +74,7 @@ func GetCommentRaw(url string) *model.UserInfo{
 func GetComment(url string) model.UserInfo{
 	var offset int = 0
 	var users model.UserInfo
-	f, _:= os.Create("/home/wangyi/" +
-		"1.txt")
+	logs.Debug("start get comment")
 	for{
 		url := GetCommentUrl(url,offset)
 		user := GetCommentRaw(url)
@@ -87,14 +85,11 @@ func GetComment(url string) model.UserInfo{
 		for _,u := range user.Data {
 			u.Content=FilterIllegalWorld(u.Content)
 			users.Data=append(users.Data, u)
-			fmt.Print(u.Content)
-			fmt.Print("\n")
-
-			f.WriteString(u.Content+"\n")
 		}
 
 		offset +=model.OffSet
 	}
+	logs.Debug("finish get comment")
 	return users
 }
 
@@ -107,21 +102,40 @@ func FilterIllegalWorld(commnent string) string{
 }
 
 
-//需要3张表
-// 第一张表存储热门信息
-//第二张表存储评论信息
-//第三张表存储用户信息
-
+func InsertHotTitleCommit(title model.HotTitle,url string,id int){
+	userInfo :=GetComment(url)
+	logs.Warn("title name %s title commit num %d",title.TitleArea,len(userInfo.Data))
+	s :=model.HotTitleCommits{
+		title,
+		userInfo.Data,
+	}
+	if err :=model.InsertHotTitle(model.Data{s});err!=nil{
+		logs.Error("insert value failure")
+		return
+	}
+	//logs.Info("insert value success",id)
+}
 func GetCommits(){
-	logs.Info("start clear sql")
-	logs.Info( "finish clear sql")
-	s := ConvertJsontoStruct(GetHotTitlefromRawData())
-	fmt.Print(s)
-	for i, _ := range s {
-		//获取到每条评论后写入sql中 对应的是s然后sql中的每个话题名字对应下方的评论 每5分钟系统跑一次。
-		if err:=model.InsertHotTilte(s[i]);err!=nil{
-			fmt.Print("insert failuer")
+		//清理数据库中存在的老数据
+		s := ConvertJsontoStruct(GetHotTitlefromRawData())
+
+		for i, t := range s {
+			logs.Debug(i)
+			//获取到每条评论后写入sql中 对应的是s然后sql中的每个话题名字对应下方的评论 每5分钟系统跑一次。
+			//userInfo :=GetComment(model.CommitRawUrl + s[i].Id + "/answers")
+			go InsertHotTitleCommit(t,model.CommitRawUrl + s[i].Id + "/answers",i)
 		}
-		//GetComment(model.CommitRawUrl + s[i].Id + "/answers")
+}
+
+//system 10分钟清理一次sql重新拉取数据一次
+func TimeRun(){
+	for{
+		logs.Info("start clear sql")
+		model.ClearSql()
+		logs.Info("finish clear sql")
+		GetCommits()
+		time.Sleep(time.Second*300*2)
+		//每隔５分钟数据库数据重新拉去一次
 	}
 }
+

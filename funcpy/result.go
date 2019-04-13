@@ -6,6 +6,8 @@ import (
 	"os"
 )
 
+
+// http get reslut
 func GetEmResult(){
 	conn, err := net.Dial("tcp", "localhost:10000")
 	if err != nil {

@@ -6,12 +6,18 @@ import (
 )
 
 // connect DB
-var session *mgo.Session
-func init(){
+var (
+	session *mgo.Session
+	db      *mgo.Database
+)
+
+func init() {
 	var err error
-	session,err = mgo.Dial("localhost:27017")
-	if err!=nil{
-		fmt.Errorf("connect mongo db is fail error: %v",err)
+	session, err = mgo.Dial("localhost:27017")
+	db = session.DB("mytest")
+
+	if err != nil {
+		fmt.Errorf("connect mongo db is fail error: %v", err)
 	}
 
 }

@@ -27,18 +27,30 @@ type HotTitle struct{
 
 type AuthorRaw struct{
 	Name string `json:"name"`
-	Sex  int
+	Sex  string `json:"sex"`
 }
 
+
+type UserInfo struct{
+	Data []UserRaw `json:"data"`
+	Url  string    `json:"url"`
+}
+
+
+//mongo中存储的数据的格式如下
 type UserRaw struct{
 	Author AuthorRaw `json:"author"` //作者的信息
 	Content string 	 `json:"content"` //评论信息
 	Id      int64	 `json:"id"`
 }
 
-type UserInfo struct{
-	Data []UserRaw `json:"data"`
-	Url  string    `json:"url"`
+type HotTitleCommits struct {
+	HotTitles  HotTitle   `json:"hot_titles"`
+	UserRaws   []UserRaw  `json:"user_raws"`
+}
+
+type Data struct {
+	HotTitlesCommit  HotTitleCommits `json:"hot_titles_commit"`
 }
 
 const(
@@ -47,10 +59,4 @@ const(
 	OffSet=20              //每次读完评论之后的偏移
 )
 
-
-const (
-	FEMALE = 0
-	MALE   = 1
-	XMALE  = 2 //获取不到性别
-)
 

@@ -3,8 +3,10 @@ package fun
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/astaxie/beego/logs"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"regexp"
 	"test/model"
 )
@@ -12,7 +14,12 @@ import (
 //获取网页界面上的原始数据
 func GetRawHotData() string{
 	client :=&http.Client{}
+	fmt.Print(model.BillbordRawUrl)
 	resp, err := client.Get(model.BillbordRawUrl)
+	if err != nil{
+		logs.Error(err.Error())
+		os.Exit(1)
+	}
 	body, err := ioutil.ReadAll(resp.Body)
 	defer resp.Body.Close()
 
