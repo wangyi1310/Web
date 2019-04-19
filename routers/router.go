@@ -7,5 +7,4 @@ import (
 
 func init() {
     beego.Router("/", &controllers.MainController{},"*:Index")
-	beego.Router("/hottitle", &controllers.MainController{}, "Get:GetHotTitleData")
 }

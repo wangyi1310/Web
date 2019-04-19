@@ -6,10 +6,7 @@ import (
 	_ "test/routers"
 )
 
-
 func main() {
 	go fun.TimeRun()
 	beego.Run()
 }
-
-
