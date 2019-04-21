@@ -14,13 +14,13 @@ import (
 func GetUserUrl(user_token string) string{
 	return "https://www.zhihu.com/people/"+user_token+"/activities"
 }
-
+var c =&http.Client{}
 func GetUserInfoRaw(user_token string) string{
 	if user_token == ""{
 		return ""
 	}
-	var client =&http.Client{}
-	resp, err := client.Get(GetUserUrl(user_token))
+
+	resp, err := c.Get(GetUserUrl(user_token))
 	if err != nil{
 		logs.Error(err.Error())
 		return ""
