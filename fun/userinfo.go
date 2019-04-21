@@ -5,11 +5,11 @@ import (
 	"github.com/astaxie/beego/logs"
 	"io/ioutil"
 	"net/http"
-	"os"
 	"regexp"
 	"strings"
 	"test/model"
 )
+
 
 func GetUserUrl(user_token string) string{
 	return "https://www.zhihu.com/people/"+user_token+"/activities"
@@ -17,14 +17,13 @@ func GetUserUrl(user_token string) string{
 
 func GetUserInfoRaw(user_token string) string{
 	if user_token == ""{
-		logs.Error("user token is null")
 		return ""
 	}
-	client :=&http.Client{}
+	var client =&http.Client{}
 	resp, err := client.Get(GetUserUrl(user_token))
 	if err != nil{
 		logs.Error(err.Error())
-		os.Exit(1)
+		return ""
 	}
 	body, err := ioutil.ReadAll(resp.Body)
 	defer resp.Body.Close()
@@ -45,7 +44,7 @@ func ParseUserInfo(raw string,authorRaw *model.AuthorRaw){
 		authorRaw.Sex = "female"
 	}
 
-	re :=regexp.MustCompile("2.002H15zM7 4V2.5s-.004-.5.5-.5h5c.5 0 .5.5.5.5V4H7z/></g></svg></div>(.*?)<div")
+	re :=regexp.MustCompile(`.5.5.5.5V4H7z"/></g></svg></div>(.*?)<div`)
 	str :=re.FindString(raw)
 	r := []rune(str)
 

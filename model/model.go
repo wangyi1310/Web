@@ -1,5 +1,6 @@
 package model
 
+
 import (
 	"fmt"
 	"github.com/astaxie/beego/logs"

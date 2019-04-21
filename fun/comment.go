@@ -49,8 +49,7 @@ func SortArray(){
 
 //
 func GetCommentRaw(url string) *model.UserInfo{
-
-	client :=&http.Client{}
+	var client =&http.Client{}
 	resp,err := client.Get(url)
 	if err !=nil{
 		fmt.Print(err)
@@ -93,7 +92,6 @@ func GetComment(url string) model.UserInfo{
 		for _,u := range user.Data {
 			u.Content=FilterIllegalWorld(u.Content)
 			GetUserInfo(&u.Author)
-			logs.Error(u)
 			users.Data=append(users.Data, u)
 		}
 
@@ -115,7 +113,7 @@ func FilterIllegalWorld(commnent string) string{
 func InsertHotTitleCommit(title model.HotTitle,url string,id int){
 	userInfo :=GetComment(url)
 	logs.Warn("title name %s title commit num %d",title.TitleArea,len(userInfo.Data))
-	s :=model.HotTitleCommits{
+	s:=model.HotTitleCommits{
 		title,
 		userInfo.Data,
 	}
@@ -123,7 +121,7 @@ func InsertHotTitleCommit(title model.HotTitle,url string,id int){
 		logs.Error("insert value failure")
 		return
 	}
-	//logs.Info("insert value success",id)
+	logs.Info("insert value success",id)
 }
 func GetCommits(){
 		//清理数据库中存在的老数据

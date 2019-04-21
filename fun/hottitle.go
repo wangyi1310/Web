@@ -13,8 +13,7 @@ import (
 
 //获取网页界面上的原始数据
 func GetRawHotData() string{
-	client :=&http.Client{}
-	fmt.Print(model.BillbordRawUrl)
+	var client =&http.Client{}
 	resp, err := client.Get(model.BillbordRawUrl)
 	if err != nil{
 		logs.Error(err.Error())

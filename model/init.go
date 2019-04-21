@@ -13,7 +13,7 @@ var (
 
 func init() {
 	var err error
-	session, err = mgo.Dial("localhost:27017")
+	session, err = mgo.Dial("0.0.0.0:27017")
 	db = session.DB("mytest")
 
 	if err != nil {
