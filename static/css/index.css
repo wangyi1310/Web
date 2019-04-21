@@ -20,7 +20,7 @@ a{text-decoration: none}
 
 .hotlist{
     width: 100%;
-    height: 1050px;
+    height: 1000px;
 }
 
 .hot{
@@ -41,6 +41,9 @@ a{text-decoration: none}
 .li_item{
     height: 25px;
     margin-top: 5px;
+}
+.li_item:hover{
+    background: #FDB45C;
 }
 .hot_item{
     width: 300px;
@@ -130,11 +133,23 @@ a{text-decoration: none}
     margin-top: 10px;
 }
 
+.grad_bar2_detail_info_item5{
+    width:50px;
+    height: 20px;
+    background: #df6659;
+    margin-top: 10px;
+}
+.grad_bar2_detail_info_item6{
+    width:50px;
+    height: 20px;
+    background: #64448f;
+    margin-top: 10px;
+}
 .grad_commit{
     margin-top: 15px;
     width: 100%;
     height: 540px;
-    background: #cccccc;
+    background: #f0efee;
 
 }
 .footer{

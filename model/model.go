@@ -13,6 +13,10 @@ func ClearSql() error{
 		logs.Error(err)
 		return err
 	}
+
+	//clearData
+	datas = []Data{}
+
 	return nil
 }
 
@@ -41,8 +45,24 @@ func GetHotTileData() []HotTitle{
 
 func GetCommentData() []UserRaw{
 	var comments []UserRaw
-	for _,data := range datas[0].HotTitlesCommit.UserRaws{
+	for _,data := range datas[5].HotTitlesCommit.UserRaws{
 		comments = append(comments, data)
 	}
 	return  comments
+}
+
+//根据title的id获取对应的评论数据
+func GetHotTileItem(title_id string) []UserRaw{
+	var comments []UserRaw
+	logs.Warn(title_id,len(datas))
+	for _,data := range datas{
+		logs.Warn(data.HotTitlesCommit.HotTitles.Id)
+		if data.HotTitlesCommit.HotTitles.Id == title_id{
+			for _,data := range data.HotTitlesCommit.UserRaws{
+				comments = append(comments, data)
+			}
+			break;
+		}
+	}
+	return comments
 }

@@ -43,7 +43,9 @@ func GetCommentUrl(url string, offest int) string{
 
 	return url
 }
+func SortArray(){
 
+}
 
 //
 func GetCommentRaw(url string) *model.UserInfo{
@@ -90,6 +92,8 @@ func GetComment(url string) model.UserInfo{
 
 		for _,u := range user.Data {
 			u.Content=FilterIllegalWorld(u.Content)
+			GetUserInfo(&u.Author)
+			logs.Error(u)
 			users.Data=append(users.Data, u)
 		}
 
@@ -101,7 +105,7 @@ func GetComment(url string) model.UserInfo{
 
 //过滤一些html相关标签
 func FilterIllegalWorld(commnent string) string{
-	re :=regexp.MustCompile(`<(.*?)>|\d{6,10}`)
+	re :=regexp.MustCompile(`<(.*?)>|\d{6,30}`)
 	commnent=re.ReplaceAllString(commnent,"")
 	return commnent
 
@@ -139,9 +143,9 @@ func GetCommits(){
 //system 10分钟清理一次sql重新拉取数据一次
 func TimeRun(){
 	for{
-		//logs.Info("start clear sql")
-		//model.ClearSql()
-		//logs.Info("finish clear sql")
+		logs.Info("start clear sql")
+		model.ClearSql()
+		logs.Info("finish clear sql")
 		GetCommits()
 		time.Sleep(time.Second*300*2)
 		//每隔５分钟数据库数据重新拉去一次

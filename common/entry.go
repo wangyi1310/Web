@@ -1,22 +1,23 @@
 package common
 
 type DefaultOutMsg struct {
-	Data   interface{}
-	Length int
+	Data   interface{} `json:"data"`
+	Length int         `json:"length"`
+	Msg    int         `json:"msg"`
 }
-
 
 //定义热门话题的结构体
 type HotTheme struct {
 	ThemeName     string
-	ThemePopulors string
-	ThemeUrl      string
+	ThemePopulors int
 	ThemeIndex    int
+	ThemeId       string
 }
+type newlist []HotTheme
 
 type Comment struct {
-	Content string
-	Status  string
-	Url     string
-	ThemeIndex    int
+	Content    string `json:"content"`
+	Status     string `json:"status"`
+	UserInfo   string `json:"user_info"`
+	ThemeIndex int    `json:"theme_index"`
 }

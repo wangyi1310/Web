@@ -43,7 +43,6 @@ func GetHotTitlefromRawData() []string {
 	params :=re.FindAllString(RawData,-1)
 
 
-	//后期修改成lambda表达式的形式
 	for index,param :=range params {
 		params[index] = fmt.Sprintf("{%s",param)
 	}
@@ -69,7 +68,7 @@ func ConvertJsontoStruct(titles []string) []model.HotTitle{
 
 //通过URL获取热门话题的ID号
 func GetTitleIdFromUrl(url string) string{
-	re :=regexp.MustCompile(`\d{6,10}`)
+	re :=regexp.MustCompile(`\d{6,25}`)
 	id :=re.FindString(url)
 	if id == ""{
 		fmt.Print("Get Question Id Fail")

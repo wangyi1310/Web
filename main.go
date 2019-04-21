@@ -9,4 +9,5 @@ import (
 func main() {
 	go fun.TimeRun()
 	beego.Run()
+
 }

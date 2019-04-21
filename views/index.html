@@ -27,7 +27,7 @@
                         <ol>
                             {{range .Themes.Data}}
                                 <li class = "li_item" style="position: relative">
-                                   <span style="font-size: 8px">{{.ThemeIndex}}</span><span style="margin-left: 10px;font-size: 8px">{{.ThemeName}}</span><span style="right: 3px;position: absolute;font-size: 8px">{{.ThemePopulors}}</span></li>
+                                   <span style="font-size: 8px">{{.ThemeIndex}}</span><span style="margin-left: 10px;font-size: 8px" onclick="getcomment({{.ThemeId}} )" onmouseover="this.style.cursor='hand'">{{.ThemeName}}</span><span style="right: 3px;position: absolute;font-size: 8px">{{.ThemePopulors}}热度</span></li>
                                 <hr style="border: 0.5px solid  #cccccc">
                             {{end}}
                         </ol>
@@ -66,12 +66,16 @@
                             <div class="grad_bar2_detail_info_item2"></div><br>
                             <div class="grad_bar2_detail_info_item3"></div><br>
                             <div class="grad_bar2_detail_info_item4"></div><br>
+                            <div class="grad_bar2_detail_info_item5"></div><br>
+                            <div class="grad_bar2_detail_info_item6"></div><br>
                         </div>
                         <div class = "grad_bar2_detail_info">
                             <div class="info">男性积极</div><br>
                             <div class="info">男性消极</div><br>
                             <div class="info">女性积极</div><br>
-                            <div class="info">女性消极</div>
+                            <div class="info">女性消极</div><br>
+                            <div class="info">男性中立</div><br>
+                            <div class="info">女性中立</div>
 
 
                     </div>
@@ -89,12 +93,8 @@
                         </div>
                     </div>
                     <div class ="grad_commit">
-                        <ol style="list-style: none">
-                            {{range .Comments.Data}}
-                                <li class = "li_item" style="position: relative">
-                                    <span style="font-size: 8px">{{.ThemeIndex}}</span><span style="margin-left: 10px;font-size: 8px">{{.Content}}</span><span style="right: 3px;position: absolute;font-size: 8px">{{.Status}}</span></li>
-                                <hr style="border: 0.5px solid  #cccccc">
-                            {{end}}
+                        <ol style="list-style: none" id = "ol">
+
                         </ol>
                     </div>
                     <script src="static/js/Chart.js"></script>
@@ -128,25 +128,37 @@
                                     value: 300,
                                     color: "#F7464A",
                                     highlight: "#FF5A5E",
-                                    label: "Red"
+                                    label: "男性积极"
                                 },
                                 {
                                     value: 50,
                                     color: "#46BFBD",
                                     highlight: "#5AD3D1",
-                                    label: "Green"
+                                    label: "男性消极"
                                 },
                                 {
                                     value: 100,
                                     color: "#FDB45C",
                                     highlight: "#FFC870",
-                                    label: "Yellow"
+                                    label: "女性积极"
                                 },
                                 {
                                     value: 40,
                                     color: "#949FB1",
                                     highlight: "#A8B3C5",
-                                    label: "Grey"
+                                    label: "女性消极"
+                                },
+                                {
+                                    value: 40,
+                                    color: "#df6659",
+                                    highlight: "#A8B3C5",
+                                    label: "男性中立"
+                                },
+                                {
+                                    value: 40,
+                                    color: "#64448f",
+                                    highlight: "#A8B3C5",
+                                    label: "女性中立"
                                 },
 
                             ];
@@ -219,9 +231,51 @@
                             });
 
                         }
+                        function success(text) {
+                            var text_json = JSON.parse(text)
+                            var data = text_json.data
+                            var str = "";
+                            for (i in data){
+                                str+='<li class = "li_item" style="position: relative">' +
+                                    '<span style="font-size: 8px">'+data[i].theme_index+
+                                    '</span><span style="margin-left: 10px;font-size: 8px">'+data[i].content+
+                                    '</span><span style="right: 3px;position: absolute;font-size: 8px">'+data[i].status+
+                                    '</span></li>'+'<hr style="border: 0.5px solid  #cccccc">';
+                            }
+
+                            var textarea = document.getElementById('ol');
+                            textarea.innerHTML = str;
+                        }
+
+                        function fail(code) {
+                            var textarea = document.getElementById('ol');
+                            textarea.value = 'Error code: ' + code;
+                        }
+                        function getcomment(str) {
+                            var request = new XMLHttpRequest(); // 新建XMLHttpRequest对象
+                            request.onreadystatechange = function () { // 状态发生变化时，函数被回调
+                                if (request.readyState === 4) { // 成功完成
+                                    // 判断响应结果:
+                                    if (request.status === 200) {
+                                        // 成功，通过responseText拿到响应的文本:
+                                        return success(request.responseText);
+                                    } else {
+                                        // 失败，根据响应码判断失败原因:
+                                        return fail(request.status);
+                                    }
+                                } else {
+                                    // HTTP请求还在继续...
+                                }
+                            }
+                            // 发送请求:
+                            request.open('GET', '/commitdata?'+"title_id="+str);
+                            request.send();
+
+                        }
                 reload1()
                 reload2()
                 reload3()
+                getcomment(320882344)
                     </script>
                 </div>
             </div>
