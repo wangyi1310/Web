@@ -1,28 +1,43 @@
 package funcpy
+
 import (
-	"bufio"
 	"fmt"
+	"github.com/astaxie/beego/logs"
 	"net"
-	"os"
+	"sync"
 )
 
-
-// http get reslut
-func GetEmResult(){
-	conn, err := net.Dial("tcp", "localhost:10000")
-	if err != nil {
-		fmt.Printf("Fail to connect, %s\n", err)
+var (
+	err error
+	conn net.Conn
+ 	mutex sync.Mutex
+)
+func init(){
+	conn, err = net.Dial("tcp", "localhost:10000")
+	if err != nil{
+		logs.Error("server connet failuer")
 		return
 	}
-	reader := bufio.NewReader(os.Stdin)
-	for {
-		input, _ := reader.ReadString('\n')
-		buf := make([]byte, 1024)
-		conn.Write([]byte(input))
-		cnt, err := conn.Read(buf)
-		if err != nil {
-			fmt.Printf("Fail to read data, %s\n", err)
-		}
-		fmt.Print(string(buf[0:cnt]))
-	}
 }
+// http get reslut
+func GetEmResult(str string,res *string)  {
+	mutex.Lock()
+	defer mutex.Unlock()
+	buf := make([]byte, 1024)
+	var length = len(str)
+	if length >= 1024{
+		length = 1024
+	}
+
+	if length == 0{
+		return
+	}
+	conn.Write([]byte(str[0:length]))
+	cnt, err := conn.Read(buf)
+	if err != nil {
+		fmt.Printf("Fail to read data, %s\n", err)
+	}
+	*res =string(buf[0:cnt])
+}
+
+

@@ -37,6 +37,7 @@ type UserRaw struct {
 	Author  AuthorRaw `json:"author"`  //作者的信息
 	Content string    `json:"content"` //评论信息
 	Id      int64     `json:"id"`
+	Status  string
 }
 
 type HotTitleCommits struct {

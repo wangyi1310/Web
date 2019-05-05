@@ -13,10 +13,6 @@ type MainController struct {
 
 func (c *MainController) Index() {
 
-	err := model.GetData()
-	if err != nil {
-		logs.Error("get hot data errro")
-	}
 	hs := model.GetHotTileData()
 	cs := model.GetCommentData()
 	var hot_themes []common.HotTheme
@@ -82,7 +78,7 @@ func (c *MainController) GetCommitData() {
 				Content:    common.CutString(c.Content, 115),
 				UserInfo:   c.Author.Name,
 				ThemeIndex: a + 1,
-				Status:     "积极",
+				Status:    c.Status,
 			},
 		)
 	}

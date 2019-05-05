@@ -83,7 +83,7 @@ func GetComment(url string) model.UserInfo{
 		url := GetCommentUrl(url,offset)
 		user := GetCommentRaw(url)
 		if user == nil{
-			continue
+			break;
 		}
 		if len(user.Data) != model.OffSet {
 			break
@@ -91,7 +91,7 @@ func GetComment(url string) model.UserInfo{
 
 		for _,u := range user.Data {
 			u.Content=FilterIllegalWorld(u.Content)
-			GetUserInfo(&u.Author)
+			//GetUserInfo(&u.Author)
 			users.Data=append(users.Data, u)
 		}
 
@@ -125,13 +125,11 @@ func InsertHotTitleCommit(title model.HotTitle,url string,id int){
 }
 func GetCommits(){
 		//清理数据库中存在的老数据
-		//s :=//
 		s := ConvertJsontoStruct(GetHotTitlefromRawData())
 
 		for i, t := range s {
 			logs.Warn(s[i].Id)
 			//获取到每条评论后写入sql中 对应的是s然后sql中的每个话题名字对应下方的评论 每5分钟系统跑一次。
-			//userInfo :=GetComment(model.CommitRawUrl + s[i].Id + "/answers")
 			if s[i].Id != "" {
 				go InsertHotTitleCommit(t, model.CommitRawUrl+s[i].Id+"/answers", i)
 			}
@@ -142,7 +140,7 @@ func GetCommits(){
 func TimeRun(){
 	for{
 		logs.Info("start clear sql")
-		model.ClearSql()
+		//model.ClearSql()
 		logs.Info("finish clear sql")
 		GetCommits()
 		time.Sleep(time.Second*300*2)
