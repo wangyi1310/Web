@@ -7,9 +7,11 @@ import (
 	"io/ioutil"
 	"net/http"
 	"regexp"
+	"sync"
 	"test/model"
-	"time"
 )
+
+var wg sync.WaitGroup //定义一个同步等待的组
 
 //获取每条热门话题下的评论数据
 
@@ -43,9 +45,6 @@ func GetCommentUrl(url string, offest int) string{
 
 	return url
 }
-func SortArray(){
-
-}
 
 //
 func GetCommentRaw(url string) *model.UserInfo{
@@ -67,7 +66,7 @@ func GetCommentRaw(url string) *model.UserInfo{
 	json_str = re.ReplaceAllString(json_str,"")
 	err = json.Unmarshal([]byte(json_str),&user)
 	if err != nil{
-	    logs.Error(json_str,err,url)
+	    logs.Error(err,url)
 		return nil
 	}
 	return &user
@@ -81,23 +80,23 @@ func GetComment(url string) model.UserInfo{
 	logs.Debug("start get comment")
 	for{
 		url := GetCommentUrl(url,offset)
-		user := GetCommentRaw(url)
-		if user == nil{
+		usersInfo := GetCommentRaw(url)
+		if usersInfo == nil{
 			break;
 		}
-		if len(user.Data) != model.OffSet {
+		if len(usersInfo.Data) != model.OffSet {
 			break
 		}
-
-		for _,u := range user.Data {
+		for _,u := range usersInfo.Data {
 			u.Content=FilterIllegalWorld(u.Content)
-			//GetUserInfo(&u.Author)
+			//funcpy.GetEmResult(u.Content, &u.Status)
 			users.Data=append(users.Data, u)
 		}
 
 		offset +=model.OffSet
 	}
 	logs.Debug("finish get comment")
+
 	return users
 }
 
@@ -113,15 +112,23 @@ func FilterIllegalWorld(commnent string) string{
 func InsertHotTitleCommit(title model.HotTitle,url string,id int){
 	userInfo :=GetComment(url)
 	logs.Warn("title name %s title commit num %d",title.TitleArea,len(userInfo.Data))
-	s:=model.HotTitleCommits{
+
+	if len(userInfo.Data) ==0 {
+		wg.Done()
+		return
+	}
+
+	s := model.HotTitleCommits{
 		title,
 		userInfo.Data,
 	}
+
 	if err :=model.InsertHotTitle(model.Data{s});err!=nil{
 		logs.Error("insert value failure")
 		return
 	}
-	logs.Info("insert value success",id)
+	logs.Info("insert value success")
+	wg.Done()
 }
 func GetCommits(){
 		//清理数据库中存在的老数据
@@ -131,20 +138,21 @@ func GetCommits(){
 			logs.Warn(s[i].Id)
 			//获取到每条评论后写入sql中 对应的是s然后sql中的每个话题名字对应下方的评论 每5分钟系统跑一次。
 			if s[i].Id != "" {
+				wg.Add(1)
 				go InsertHotTitleCommit(t, model.CommitRawUrl+s[i].Id+"/answers", i)
 			}
 		}
+		wg.Wait()
 }
 
 //system 10分钟清理一次sql重新拉取数据一次
 func TimeRun(){
-	for{
+
 		logs.Info("start clear sql")
-		//model.ClearSql()
+		model.ClearSql()
 		logs.Info("finish clear sql")
 		GetCommits()
-		time.Sleep(time.Second*300*2)
+		SetUserInfo()
 		//每隔５分钟数据库数据重新拉去一次
-	}
 }
 

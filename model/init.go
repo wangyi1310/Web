@@ -3,6 +3,7 @@ package model
 import (
 	"github.com/astaxie/beego/logs"
 	"gopkg.in/mgo.v2"
+	"os"
 )
 
 // connect DB
@@ -17,6 +18,7 @@ func init() {
 	db = session.DB("mytest")
 	if err != nil {
 		logs.Error("connect mongo db is fail error: %v", err)
+		os.Exit(1)
 	}
 
 }

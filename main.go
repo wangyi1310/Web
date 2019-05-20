@@ -2,15 +2,15 @@ package main
 
 import (
 	"github.com/astaxie/beego"
-	"test/model"
+	"test/fun"
 	_ "test/routers"
 )
 
 func main() {
 	//go fun.TimeRun()
-	go model.GetData()
+	go fun.SetUserInfo()
 	beego.Run()
+
+
 }
-
-
 

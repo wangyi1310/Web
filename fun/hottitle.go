@@ -26,7 +26,6 @@ func GetRawHotData() string{
 		fmt.Print(err)
 		return ""
 	}
-
 	return string(body)
 }
 

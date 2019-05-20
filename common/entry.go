@@ -21,3 +21,14 @@ type Comment struct {
 	UserInfo   string `json:"user_info"`
 	ThemeIndex int    `json:"theme_index"`
 }
+
+type Emotion struct {
+	Pos   int `json:"pos"`
+	Neg   int `json:"neg"`
+	NoEmo int `json:"no_emo"`
+}
+
+type SexCount struct {
+	Male int `json:"male"`
+	Female int `json:"female"`
+}
