@@ -33,7 +33,7 @@ func InsertHotTitle(data Data) error {
 }
 
 func InsertUserInfo(userInof AuthorRaw) error {
-	err := db.C("userinfo1").Insert(userInof)
+	err := db.C("userinfo").Insert(userInof)
 	if err != nil {
 		logs.Error(err.Error())
 		return err
@@ -42,9 +42,8 @@ func InsertUserInfo(userInof AuthorRaw) error {
 }
 
 func GetData() []Data {
-	if len(Datas) ==0 {
-		db.C("data").Find(nil).All(&Datas)
-	}
+	Datas = []Data{}
+	db.C("data").Find(nil).All(&Datas)
 	logs.Debug("get data finish")
 	return Datas
 }
@@ -76,7 +75,7 @@ func GetHotTileItem(title_id string) []UserRaw {
 }
 
 
-func EmotionClassData() (int, int, int) {
+func EmotionClassData(id string) (int, int, int) {
 	Datas := GetData()
 	logs.Debug("set content status start")
 	var (
@@ -86,16 +85,18 @@ func EmotionClassData() (int, int, int) {
 	)
 
 	for _, data := range Datas {
-		for _, u := range data.HotTitlesCommit.UserRaws {
-			logs.Warn(u)
-			if u.Status == "好" {
-				PosCount++
-			} else if u.Status == "不好" {
-				NegCount++
-			} else {
-				NoCount++
+		if data.HotTitlesCommit.HotTitles.Id == id || id == "000000"{
+			for _, u := range data.HotTitlesCommit.UserRaws {
+				if u.Status == "积极" {
+					PosCount++
+				} else if u.Status == "消极" {
+					NegCount++
+				} else {
+					NoCount++
+				}
 			}
 		}
+
 	}
 	return PosCount, NegCount, NoCount
 }

@@ -8,16 +8,25 @@
     <link rel="stylesheet" type="text/css" href="static/css/default.css">
     <style type="text/css">
         .demo-chat{width: 400px;}
+
+     a{
+         text-decoration:none;
+         color:#0000FF;
+     }
     </style>
+
     <!--[if IE]>
     <script src="http://libs.useso.com/js/html5shiv/3.7/html5shiv.min.js"></script>
     <![endif]-->
 </head>
 <body style="width:2000px">
 <div class ="box">
-    <div class = "header"></div>
+    <div class = "header">
+        <a style="color: white;margin-top: 5px;font-size: 25px">词云</a>
+    </div>
     <div class = "body">
             <div class="wordcloud"> </div>
+            <hr style="border: 5px solid  #f0efee">
             <div class="hotlist">
                 <div class = "hot">
                     <div class="hot_title">
@@ -27,7 +36,7 @@
                         <ol>
                             {{range .Themes.Data}}
                                 <li class = "li_item" style="position: relative">
-                                   <span style="font-size: 8px">{{.ThemeIndex}}</span><span style="margin-left: 10px;font-size: 8px" onclick="getcomment({{.ThemeId}} )" onmouseover="this.style.cursor='hand'">{{.ThemeName}}</span><span style="right: 3px;position: absolute;font-size: 8px">{{.ThemePopulors}}热度</span></li>
+                                   <span style="font-size: 8px">{{.ThemeIndex}}</span><span style="margin-left: 10px;font-size: 8px" onclick="getcomment({{.ThemeId}});reload1({{.ThemeId}})" onmouseover="this.style.cursor='hand'">{{.ThemeName}} </span><span style="right: 3px;position: absolute;font-size: 8px">{{.ThemePopulors}}热度</span></li>
                                 <hr style="border: 0.5px solid  #cccccc">
                             {{end}}
                         </ol>
@@ -86,7 +95,7 @@
                                         <div class = "demo-chat_head">
                                             <a style="font-size: 15px">评论者行业分布</a>
                                         </div>
-                                        <canvas id="canvas3" height="450" width="450"></canvas>
+                                        <canvas id="canvas3" height="420" width="450"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -95,32 +104,47 @@
                     <div class ="grad_commit">
                         <ol style="list-style: none" id = "ol">
 
-                        </ol>
+                        </ol><button id="button1" onclick="jump()">查看更多</button>
                     </div>
+
                     <script src="static/js/Chart.js"></script>
                     <script>
-                        function reload1() {
-                            var randomScalingFactor = function(){ return 50};
-                            var barChartData = {
-                                labels : ["积极","消极","中立"],
-                                datasets : [
-                                    {
-                                        fillColor : "rgba(151,187,205,0.5)",
-                                        strokeColor : "rgba(151,187,205,0.8)",
-                                        highlightFill : "rgba(151,187,205,0.75)",
-                                        highlightStroke : "rgba(151,187,205,1)",
-                                        data : [100,200,300]
+                        var currentTitle;
+                        function reload1(str) {
+                            var request = new XMLHttpRequest(); // 新建XMLHttpRequest对象
+                            request.onreadystatechange = function () { // 状态发生变化时，函数被回调
+                                if (request.readyState == 4) { // 成功完成
+                                    // 判断响应结果:
+                                    if (request.status == 200) {
+                                        // 成功，通过responseText拿到响应的文本:
+                                        var text_json = JSON.parse(request.responseText)
+                                        var data = text_json.data
+                                        var barChartData = {
+                                            labels : ["积极","消极","中立"],
+                                            datasets : [
+                                                {
+                                                    fillColor : "rgba(151,187,205,0.5)",
+                                                    strokeColor : "rgba(151,187,205,0.8)",
+                                                    highlightFill : "rgba(151,187,205,0.75)",
+                                                    highlightStroke : "rgba(151,187,205,1)",
+                                                    data : [data.pos,data.neg,data.no_emo]
+                                                }
+                                            ]
+
+                                        }
+
+                                        var ctx = document.getElementById("canvas").getContext("2d");
+                                        window.myBar = new Chart(ctx).Bar(barChartData, {
+                                            responsive : true
+                                        });
                                     }
-                                ]
-
+                                } else {
+                                    // HTTP请求还在继续...
+                                }
                             }
-
-                                var ctx = document.getElementById("canvas").getContext("2d");
-                                window.myBar = new Chart(ctx).Bar(barChartData, {
-                                    responsive : true
-                                });
-
-
+                            // 发送请求:
+                            request.open('GET', '/emotionclass?'+"title_id="+str);
+                            request.send();
                         }
                         function  reload2() {
                             var doughnutData = [
@@ -211,7 +235,7 @@
                         }
                         function reload3(){
                             var radarChartData = {
-                                labels: ["Eating", "Drinking", "Sleeping", "Designing", "Coding", "Cycling", "Running"],
+                                labels: ["IT行业", "金融行业", "房地产", "自由职业", "医生", "学生", "旅游行业"],
                                 datasets: [
                                     {
                                         label: "My First dataset",
@@ -231,50 +255,44 @@
                             });
 
                         }
-                        function success(text) {
-                            var text_json = JSON.parse(text)
-                            var data = text_json.data
-                            var str = "";
-                            for (i in data){
-                                str+='<li class = "li_item" style="position: relative">' +
-                                    '<span style="font-size: 8px">'+data[i].theme_index+
-                                    '</span><span style="margin-left: 10px;font-size: 8px">'+data[i].content+
-                                    '</span><span style="right: 3px;position: absolute;font-size: 8px">'+data[i].status+
-                                    '</span></li>'+'<hr style="border: 0.5px solid  #cccccc">';
-                            }
-
-                            var textarea = document.getElementById('ol');
-                            textarea.innerHTML = str;
-                        }
-
-                        function fail(code) {
-                            var textarea = document.getElementById('ol');
-                            textarea.value = 'Error code: ' + code;
-                        }
+                        var currentTitle;
                         function getcomment(str) {
+                            currentTitle = str;
                             var request = new XMLHttpRequest(); // 新建XMLHttpRequest对象
                             request.onreadystatechange = function () { // 状态发生变化时，函数被回调
-                                if (request.readyState === 4) { // 成功完成
+                                if (request.readyState == 4) { // 成功完成
                                     // 判断响应结果:
-                                    if (request.status === 200) {
+                                    if (request.status == 200) {
                                         // 成功，通过responseText拿到响应的文本:
-                                        return success(request.responseText);
-                                    } else {
-                                        // 失败，根据响应码判断失败原因:
-                                        return fail(request.status);
+                                        var text_json = JSON.parse(request.responseText)
+                                        var data = text_json.data
+                                        var str = "";
+                                        for (i in data){
+                                            str+='<li class = "li_item" style="position: relative">' +
+                                                '<span style="font-size: 8px">'+data[i].theme_index+
+                                                '</span><span style="margin-left: 10px;font-size: 8px"><a href='+data[i].url+'>'+data[i].content+
+                                                '</a></span><span style="right: 3px;position: absolute;font-size: 8px">'+data[i].status+
+                                                '</span></li>'+'<hr style="border: 0.5px solid  #cccccc">';
+                                        }
+
+                                        var textarea = document.getElementById('ol');
+                                        textarea.innerHTML = str;
+
                                     }
                                 } else {
                                     // HTTP请求还在继续...
                                 }
                             }
                             // 发送请求:
-                            request.open('GET', '/commitdata?'+"title_id="+str);
+                            request.open('GET', '/comment?'+"title_id="+str);
                             request.send();
-
                         }
-                reload1()
-                reload2()
-                reload3()
+                        function jump(){
+                            window.location.href="/comments?title_id=" + currentTitle
+                        }
+                 reload1("000000")
+                 reload2()
+                 reload3()
                     </script>
                 </div>
             </div>

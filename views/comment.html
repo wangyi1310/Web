@@ -1,0 +1,20 @@
+<html>
+<head>
+    <title>情感分析系统</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="static/css/index.css">
+</head>
+<body>
+<div class ="grad_commit">
+    <ol style="list-style: none" id = "ol">
+        {{range .Themes.Data}}
+        <li class = "li_item" style="position: relative">
+            <span style="font-size: 8px">{{.ThemeIndex}}</span><span style="margin-left: 10px;font-size: 8px" onclick="getcomment({{.ThemeId}});reload1({{.ThemeId}})" onmouseover="this.style.cursor='hand'">{{.ThemeName}} </span><span style="right: 3px;position: absolute;font-size: 8px">{{.ThemePopulors}}热度</span></li>
+        <hr style="border: 0.5px solid  #cccccc">
+        {{end}}
+    </ol>
+</div>
+
+
+</body>
+</html>

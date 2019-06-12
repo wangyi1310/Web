@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"regexp"
 	"sync"
+	"test/funcpy"
 	"test/model"
 )
 
@@ -89,7 +90,7 @@ func GetComment(url string) model.UserInfo{
 		}
 		for _,u := range usersInfo.Data {
 			u.Content=FilterIllegalWorld(u.Content)
-			//funcpy.GetEmResult(u.Content, &u.Status)
+			funcpy.GetEmResult(u.Content, &u.Status)
 			users.Data=append(users.Data, u)
 		}
 
@@ -130,7 +131,7 @@ func InsertHotTitleCommit(title model.HotTitle,url string,id int){
 	logs.Info("insert value success")
 	wg.Done()
 }
-func GetCommits(){
+func GetComments(){
 		//清理数据库中存在的老数据
 		s := ConvertJsontoStruct(GetHotTitlefromRawData())
 
@@ -147,12 +148,12 @@ func GetCommits(){
 
 //system 10分钟清理一次sql重新拉取数据一次
 func TimeRun(){
-
 		logs.Info("start clear sql")
 		model.ClearSql()
 		logs.Info("finish clear sql")
-		GetCommits()
-		SetUserInfo()
+		GetComments()
+		funcpy.Close()
+		//SetUserInfo()
 		//每隔５分钟数据库数据重新拉去一次
 }
 

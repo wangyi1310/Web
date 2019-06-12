@@ -59,7 +59,6 @@ func ParseUserInfo(raw string, authorRaw model.AuthorRaw)  {
 		}
 	}
 	authorRaw.Work = cnstr
-	logs.Error(authorRaw)
 	model.InsertUserInfo(authorRaw)
 }
 
@@ -76,6 +75,9 @@ func SetUserInfo() {
 				continue
 			}
 			wg2.Add(1)
+			u.Author.Status=u.Status
+			u.Author.Id = d.HotTitlesCommit.HotTitles.Id
+			logs.Warn(u.Author)
 		    go GetUserInfo(u.Author)
 		}
 	}

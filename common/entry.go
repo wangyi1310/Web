@@ -20,6 +20,7 @@ type Comment struct {
 	Status     string `json:"status"`
 	UserInfo   string `json:"user_info"`
 	ThemeIndex int    `json:"theme_index"`
+	Url       string  `json:"url"`
 }
 
 type Emotion struct {

@@ -10,14 +10,18 @@ import (
 var (
 	err error
 	conn net.Conn
+
  	mutex sync.Mutex
 )
-func init(){
+func init() {
 	conn, err = net.Dial("tcp", "localhost:10000")
-	if err != nil{
+	if err != nil {
 		logs.Error("server connet failuer")
 		return
 	}
+}
+func Close(){
+	conn.Close()
 }
 // http get reslut
 func GetEmResult(str string,res *string)  {

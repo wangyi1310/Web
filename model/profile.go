@@ -25,6 +25,8 @@ type AuthorRaw struct {
 	Url_token string `json:"url_token"`
 	Work      string `json:"work"`
 	Sex       string `json:"sex"`
+	Status    string `json:"status"`
+	Id        string `json:"id"`
 }
 
 type UserInfo struct {
