@@ -70,7 +70,9 @@ func(c *MainController) EmotionClass(){
 		logs.Error("title id is null")
 	}
     pos,neg,noEmo := model.EmotionClassData(title_id)
-	c.Data["json"] = common.DefaultOutMsg{common.Emotion{pos,neg,noEmo}, 0, 0}
+	results,_ :=model.SexClassCount(title_id)
+	c.Data["json"] = common.DefaultOutMsg{common.Emotion{pos,neg,noEmo,results[0],results[1],results[2],
+		results[3],results[4],results[5]}, 0, 0}
 	c.ServeJSON()
 	return
 }
@@ -80,7 +82,7 @@ func(c *MainController) SexClass(){
 	if title_id == "" {
 		logs.Error("title id is null")
 	}
-	results,err :=model.SexClassCount()
+	results,err :=model.SexClassCount(title_id)
 	if err!=nil{
 		c.Data["json"] = common.DefaultOutMsg{0, 0, 1}
 		c.ServeJSON()
@@ -95,7 +97,30 @@ func(c *MainController) SexClass(){
 }
 
 
-func (c *MainController) GetCommentsDatas() {
+//func (c *MainController) GetCommentsDatas() {
+//	title_id := c.GetString("title_id")
+//	if title_id == "" {
+//		logs.Error("title id is null")
+//	}
+//	var hot_comments []common.Comment
+//	cs := model.GetHotTileItem(title_id)
+//	for a, c := range cs {
+//		hot_comments = append(hot_comments,
+//			common.Comment{
+//				Content:    common.CutString(c.Content, 115),
+//				UserInfo:   c.Author.Name,
+//				ThemeIndex: a + 1,
+//				Status:    c.Status,
+//				Url: fun.GetUserUrl(c.Author.Url_token),
+//			},
+//		)
+//	}
+//	c.Data["json"] = common.DefaultOutMsg{hot_comments, len(hot_comments), 0}
+//	c.ServeJSON()
+//	return
+//}
+
+func (c *MainController) GetCommentsDatas(){
 	title_id := c.GetString("title_id")
 	if title_id == "" {
 		logs.Error("title id is null")
@@ -103,17 +128,19 @@ func (c *MainController) GetCommentsDatas() {
 	var hot_comments []common.Comment
 	cs := model.GetHotTileItem(title_id)
 	for a, c := range cs {
+		author := model.SeachUser(c.Author.Name)
 		hot_comments = append(hot_comments,
 			common.Comment{
-				Content:    common.CutString(c.Content, 115),
+				Content:    common.CutString(c.Content, 130),
 				UserInfo:   c.Author.Name,
 				ThemeIndex: a + 1,
 				Status:    c.Status,
 				Url: fun.GetUserUrl(c.Author.Url_token),
+				Sex: author.Sex,
+				Work: author.Work,
 			},
 		)
 	}
-	c.Data["json"] = common.DefaultOutMsg{hot_comments, len(hot_comments), 0}
-	c.ServeJSON()
-	return
+	c.Data["Comment"] = common.DefaultOutMsg{hot_comments, len(hot_comments), 0}
+	c.TplName="comment.html"
 }

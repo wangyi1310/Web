@@ -101,17 +101,51 @@ func EmotionClassData(id string) (int, int, int) {
 	return PosCount, NegCount, NoCount
 }
 
-func SexClassCount()([]int,error){
-	maleCount,err :=db.C("userinfo").Find(bson.M{"sex": "male"}).Count()
-	if err != nil {
-		logs.Error( "get sex male count failuer error: %v", err)
-		return []int{},err
-	}
-	femaleCount,err :=db.C("userinfo").Find(bson.M{"sex": "female"}).Count()
+func SexClassCount(id string)([]int,error){
+	malePosCount,err :=db.C("userinfo").Find(bson.M{"sex": "male","id":id,"status" : "积极"}).Count()
 	if err != nil {
 		logs.Error( "get sex male count failuer error: %v", err)
 		return []int{},err
 	}
 
-	return []int{maleCount,femaleCount},nil
+	maleNegCount,err :=db.C("userinfo").Find(bson.M{"sex": "male","id":id,"status" : "消极"}).Count()
+	if err != nil {
+		logs.Error( "get sex male count failuer error: %v", err)
+		return []int{},err
+	}
+
+	maleNoCount,err :=db.C("userinfo").Find(bson.M{"sex": "male","id":id,"status" : "中立"}).Count()
+	if err != nil {
+		logs.Error( "get sex male count failuer error: %v", err)
+		return []int{},err
+	}
+
+	feMalePosCount,err :=db.C("userinfo").Find(bson.M{"sex": "female","id":id,"status" : "积极"}).Count()
+	if err != nil {
+		logs.Error( "get sex male count failuer error: %v", err)
+		return []int{},err
+	}
+
+	feMaleNegCount,err :=db.C("userinfo").Find(bson.M{"sex": "female","id":id,"status" : "消极"}).Count()
+	if err != nil {
+		logs.Error( "get sex male count failuer error: %v", err)
+		return []int{},err
+	}
+
+	feMaleNoCount,err :=db.C("userinfo").Find(bson.M{"sex": "female","id":id,"status" : "中立"}).Count()
+	if err != nil {
+		logs.Error( "get sex male count failuer error: %v", err)
+		return []int{},err
+	}
+
+	return []int{malePosCount,maleNegCount,maleNoCount,feMalePosCount,feMaleNegCount,feMaleNoCount},nil
+}
+
+func SeachUser(username string) AuthorRaw{
+	var user AuthorRaw
+	err:=db.C("userinfo").Find(bson.M{"name": username}).One(&user)
+	if err !=nil{
+		return AuthorRaw{}
+	}
+	return user
 }

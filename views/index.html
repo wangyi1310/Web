@@ -109,6 +109,7 @@
 
                     <script src="static/js/Chart.js"></script>
                     <script>
+                        var data;
                         var currentTitle;
                         function reload1(str) {
                             var request = new XMLHttpRequest(); // 新建XMLHttpRequest对象
@@ -118,7 +119,7 @@
                                     if (request.status == 200) {
                                         // 成功，通过responseText拿到响应的文本:
                                         var text_json = JSON.parse(request.responseText)
-                                        var data = text_json.data
+                                        data = text_json.data
                                         var barChartData = {
                                             labels : ["积极","消极","中立"],
                                             datasets : [
@@ -137,6 +138,48 @@
                                         window.myBar = new Chart(ctx).Bar(barChartData, {
                                             responsive : true
                                         });
+
+                                        var doughnutData = [
+                                            {
+                                                value: data.male_pos_count,
+                                                color: "#F7464A",
+                                                highlight: "#FF5A5E",
+                                                label: "男性积极"
+                                            },
+                                            {
+                                                value: data.male_neg_count,
+                                                color: "#46BFBD",
+                                                highlight: "#5AD3D1",
+                                                label: "男性消极"
+                                            },
+                                            {
+                                                value: data.female_pos_count,
+                                                color: "#FDB45C",
+                                                highlight: "#FFC870",
+                                                label: "女性积极"
+                                            },
+                                            {
+                                                value: data.female_neg_count,
+                                                color: "#949FB1",
+                                                highlight: "#A8B3C5",
+                                                label: "女性消极"
+                                            },
+                                            {
+                                                value: data.male_no_count,
+                                                color: "#df6659",
+                                                highlight: "#A8B3C5",
+                                                label: "男性中立"
+                                            },
+                                            {
+                                                value: data.female_no_count,
+                                                color: "#64448f",
+                                                highlight: "#A8B3C5",
+                                                label: "女性中立"
+                                            },
+                                        ];
+
+                                        var ctx2 = document.getElementById("chart-area").getContext("2d");
+                                        window.myDoughnut = new Chart(ctx2).Doughnut(doughnutData, {responsive: true});
                                     }
                                 } else {
                                     // HTTP请求还在继续...

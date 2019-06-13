@@ -7,9 +7,11 @@
 <body>
 <div class ="grad_commit">
     <ol style="list-style: none" id = "ol">
-        {{range .Themes.Data}}
+
+        {{range .Comment.Data}}<span style="font-size: 10px">&nbsp用户名：<a style="color: black" href={{.Url}}>{{.UserInfo}}</a>&nbsp性别:{{.Sex}} &nbsp;行业：{{.Work}}</span>
         <li class = "li_item" style="position: relative">
-            <span style="font-size: 8px">{{.ThemeIndex}}</span><span style="margin-left: 10px;font-size: 8px" onclick="getcomment({{.ThemeId}});reload1({{.ThemeId}})" onmouseover="this.style.cursor='hand'">{{.ThemeName}} </span><span style="right: 3px;position: absolute;font-size: 8px">{{.ThemePopulors}}热度</span></li>
+            {{/*<span style="font-size: 8px">{{.ThemeIndex}}</span><span style="margin-left: 10px;font-size: 8px">用户名:<a style="color: black" href={{.Url}}>{{.UserInfo}}</a></span>*/}}
+            <span style="left: 160px;font-size: 8px">评论内容：{{.Content}} </span><span style="right: 3px;position: absolute;font-size: 8px">&nbsp 情感倾向:{{.Status}}</span></li>
         <hr style="border: 0.5px solid  #cccccc">
         {{end}}
     </ol>
